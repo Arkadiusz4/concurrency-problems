@@ -108,4 +108,22 @@ func main() {
 
 	go pizzeria(pizzaJob)
 
+	for i := range pizzaJob.data {
+		if i.pizzaNumber <= NumberOfPizzas {
+			if i.success {
+				color.Green(i.message)
+				color.Green("Order #%d is out for delivery", i.pizzaNumber)
+			} else {
+				color.Red(i.message)
+				color.Red("The customer is really really mad!")
+			}
+		} else {
+			color.Cyan("Done making pizzas...")
+			err := pizzaJob.Close()
+			if err != nil {
+				color.Red("*** Error closing channel!", err)
+			}
+		}
+	}
+
 }
