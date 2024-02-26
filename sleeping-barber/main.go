@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/fatih/color"
 	"math/rand"
 	"time"
@@ -32,6 +33,9 @@ func main() {
 	color.Green("The shop is open for the day!")
 
 	shop.addBarber("Frank")
+	shop.addBarber("Tim")
+	shop.addBarber("Roger")
+	shop.addBarber("Andrew")
 
 	shopClosing := make(chan bool)
 	closed := make(chan bool)
@@ -47,9 +51,16 @@ func main() {
 
 	go func() {
 		for {
-			
+			randomMilliseconds := rand.Int() % (2 * arrivalRate)
+			select {
+			case <-shopClosing:
+				return
+			case <-time.After(time.Millisecond * time.Duration(randomMilliseconds)):
+				shop.addClient(fmt.Sprintf("Client #$d", i))
+				i++
+			}
 		}
 	}()
 
-	time.Sleep(5 * time.Second)
+	<-closed
 }
