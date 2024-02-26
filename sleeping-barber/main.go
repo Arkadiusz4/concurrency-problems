@@ -33,5 +33,23 @@ func main() {
 
 	shop.addBarber("Frank")
 
+	shopClosing := make(chan bool)
+	closed := make(chan bool)
+
+	go func() {
+		<-time.After(timeOpen)
+		shopClosing <- true
+		shop.closeShopForDay()
+		closed <- true
+	}()
+
+	i := 1
+
+	go func() {
+		for {
+			
+		}
+	}()
+
 	time.Sleep(5 * time.Second)
 }
